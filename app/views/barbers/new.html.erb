@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+
+    <h1> We are going to need some information! </h1>
+
+
+      <%= form_for(@barber) do |f| %>
+      <%= f.label :name %>
+      <%= f.text_field :name, class: "form-control input-lg edit-input input-name" %>
+      <br />
+      <br />
+      <%= f.label :description %>
+      <%= f.text_area :description, class: "form-control input-lg edit-input" %>
+      <br />
+      <br />
+      <%= f.label :location %>
+      <%= f.text_area :location, class: "form-control input-lg edit-input" %>
+      <%= f.submit %>
+      <% end %>
+    </div>
+  </div>
+</div>

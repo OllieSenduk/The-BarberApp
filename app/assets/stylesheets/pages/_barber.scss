@@ -1,0 +1,84 @@
+.parent {
+  border: 5px solid lightcoral;
+  display: flex;
+  justify-content: space-around;
+}
+
+.item {
+  width: 100px;
+}
+
+.map_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  padding: 20px;
+  padding-left: 16px;
+  background-color: white;
+  border-radius: 45px;
+  margin-left: 15px;
+}
+
+.barber-flex {
+  display: flex;
+}
+
+.barber-info {
+  width: 50%;
+  margin-bottom: 90px;
+  text-align: center;
+}
+
+.services-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.services-flex a {
+  width: 200px;
+}
+
+.review-box {
+  width: 100%;
+  background-color: #f3f3f3;
+  text-align: center;
+  padding: 20px;
+}
+
+.barber-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.review-photos {
+  text-align: center;
+}
+
+.button-flex {
+  display: flex;
+  justify-content: space-around;
+  background-color: #f3f3f3;
+}
+
+.description {
+  width: 33%;
+  text-align: center;
+}
+
+.services-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.infobox {
+  text-align: center;
+  width: 33%;
+}

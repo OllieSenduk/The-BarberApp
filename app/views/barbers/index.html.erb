@@ -1,0 +1,48 @@
+<div class="container">
+	<div class="row">
+    <div class="col-md-9-offset col-md-4-offset">
+      <section class="first">
+          <h3 class="effect">Find your barber</h3>
+      </section>
+      </div>
+    </div>
+  </div>
+
+<div class="container container-index">
+  <div class="row row-index">
+    <% @barbers.each do |barber| %>
+    <div class="col-xs-12  col-md-4">
+    <%= link_to(barber) do %>
+      <div class="card-background">
+        <div class="card" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.2)), url(<%= image_path(barber.picture ? barber.picture : "http://www.belmontbarbershop.com/wp-content/uploads/2013/05/intro_image.jpg" ) %>);">
+          <%= image_tag "beardman.png", class: "card-user avatar" %>
+        </div>
+        <div class="card-location">
+          <p> <%= barber.location %> </p>
+        </div>
+        <div class="card-hover">
+          <p>
+            <%= barber.description[0..100] %>...
+            <% average = 0 %>
+            <% barber.reviews.each do |e| %>
+            <% average += e.rating.to_i %>
+            <% end %>
+          </p>
+        </div>
+        <h4>
+          <%= link_to "#{barber.name}", barber_path(barber), class: "barber-name" %>
+        </h4>
+        <div class="card-rating">
+          Rating:
+          <% if barber.reviews.length == 0 %>
+          <%= "Not Rated Yet!" %>
+          <% else %>
+          <%= average/barber.reviews.length %>
+          <% end %>
+        </div>
+      </div>
+      <% end  %>
+    </div>
+    <% end %>
+  </div>
+</div>

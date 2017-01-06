@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="row"">
+    <h2> Spots still open</h2>
+    <% @barber.availabilities.each do |availability| %>
+      <% if availability.appointment.nil? %>
+        <p>
+          <%= "#{availability.start.strftime("%b %e, %l:%M %p")} to #{availability.end.strftime("%b %e, %l:%M %p")}" %>
+          <br>
+        </p>
+      <% end %>
+    <% end %>
+  </div>
+
+
+  <div id="appointments">
+    <h3 id="month">
+    <%= link_to "<", date: @date.prev_week %>
+    <%= @date.strftime("%B %Y") %>
+    <%= link_to ">", date: @date.next_week %>
+    </h3>
+    <%= calendar @date do |calendar_date| %>
+      <%= calendar_date.day %>
+      <% @availabilities.each do |availability| %>
+        <% cover = availability.start.to_date.between?(calendar_date, calendar_date.end_of_day) %>
+        <% if cover %>
+          <% if availability.appointment  %>
+            <div class="appointment-booked">
+              <p>Booked</p>
+            </div>
+          <% else %>
+          <div class="appointment-background">
+            <div class="appointment-availability">
+              <%= availability.start.strftime("%l:%M %p") %>
+              -
+              <%= availability.end.strftime("%l:%M %p") %>
+              <br>
+
+            </div>
+            <div class="appointment-hover">
+                <button type="button" id="book-btn" class="btn btn-default btn-block appointment-book" data-toggle="modal" data-target="  #book-modal" data-start-time="<%= availability.start %>">
+                  Book
+                </button>
+            </div>
+          </div>
+          <% end %>
+        <% end %>
+      <% end %>
+   <% end %>
+ </div>
+
+
+
+<!-- Modal with form -->
+  <div class="modal fade bd-example-modal-sm" id="book-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="book-modal">
+          <%= simple_form_for([@barber, @appointment]) do |f| %>
+
+          <%= f.input :availability_id, collection: @barber.available_times, label_method: :start, value_method: :id %>
+
+          <%= f.input :barber_service, collection: @barber_services  %>
+          <p>
+          <%= f.button :submit %>
+          </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

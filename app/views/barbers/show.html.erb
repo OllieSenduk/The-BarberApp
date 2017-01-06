@@ -1,0 +1,120 @@
+  <div class="profile-banner" style="background-image: linear-gradient(-225deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.35) 50%), url( <%= image_path("#{@barber.photo}") %>);">
+    <div class="profile-banner-content">
+      <section class="first">
+        <h1 <span class="text-white"><%= @barber.name %></span></h1>
+      </section>
+    </div>
+  </div>
+
+  <!-- Barber_banner_2.png -->
+
+  <div class="button-flex">
+    <div class="file-upload">
+      <% if @barber.user == current_user %>
+      <%= simple_form_for(@barber) do |f| %>
+      <%= f.input :photo %>
+      <%= f.input :photo_cache, as: :hidden %>
+      <%= f.submit "Update Profile picture", class: "btn-update" %>
+      <% end %>
+      <% end %>
+    </div>
+
+    <div class="btn-group">
+      <% if @barber.user == current_user %>
+      <%= link_to "Edit Profile", edit_barber_path(@barber), class: "edit-btn" %>
+      <br>
+      <%= link_to "Delete Profile", barber_path(@barber), class: "edit-btn", method: :delete, data: { confirm: "you sure?" } %>
+      <% end %>
+    </div>
+  </div>
+
+
+<div class="services-row">
+  <div class="infobox">
+    <h2>Services</h2>
+    <% @barber.barber_services.each do |barber_service|  %>
+    <p><i class="fa fa-scissors" aria-hidden="true"></i> <%= barber_service.name %> Price - <%= barber_service.price %> (+- <%= barber_service.duration %> minutes)</p>
+    <% end %>
+      <br>
+    <% if current_user.barber == @barber  %>
+      <%= link_to 'Agenda', barber_appointments_path(@barber), class: "edit-btn" %>
+    <% else %>
+  </div>
+
+  <div class="book-box">
+      <%= link_to "Book Appointment", new_barber_appointment_path(@barber), class:"edit-btn" %>
+    <% end %>
+  </div>
+
+  <div class="description">
+    <h2> <%= @barber.description %> </h2>
+  </div>
+</div>
+
+
+  <div id="map" style="width: 100%; height: 350px; border-style: groove;"></div>
+
+  <div class="review-box">
+    <h2>Reviews</h2>
+    <% @barber.reviews.each do |review| %>
+
+    <h4>  <%= review.description %></h4>
+    <p> posted by : <%= review.user.email %> at <%= review.user.created_at.strftime("%b %e, %l:%M %p") %></p>
+
+    <p><% review.rating.to_i.times do %> <i class='fa fa-star' aria-hidden='true'></i> <% end %> </p>
+    <% if review.user == current_user %>
+    <%= link_to 'Edit Review', edit_barber_review_path(@barber, review) %>
+    <br>
+    <%= link_to "Delete", barber_review_path(@barber, review), method: :delete, data: { confirm: "Are you sure?" } %>
+    <% end %>
+    <% end %>
+    <% if current_user.barber != @barber %>
+    <%= link_to 'Leave a review!', new_barber_review_path(@barber), class: "btn btn-default" %>
+    <% end %>
+  </div>
+
+
+  <div class="review-photos">
+    <div class=container>
+      <div class=row>
+        <h3> Some of the user pictures</h3>
+        <% @barber.reviews.each do |review| %>
+        <div class="col-sm-3 ">
+          <div class= image-attr>
+            <a href="<%= review.photo %>" class="swipebox">
+              <%= image_tag review.photo, class: "img-responsive" %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <% content_for(:after_js) do %>
+  <%= javascript_tag do %>
+  var styles = [{"featureType":"landscape","stylers":[{"hue":"#FFBB00"},{"saturation":43.400000000000006},{"lightness":37.599999999999994},{"gamma":1}]},{"featureType":"road.highway","stylers":[{"hue":"#FFC200"},{"saturation":-61.8},{"lightness":45.599999999999994},{"gamma":1}]},{"featureType":"road.arterial","stylers":[{"hue":"#FF0300"},{"saturation":-100},{"lightness":51.19999999999999},{"gamma":1}]},{"featureType":"road.local","stylers":[{"hue":"#FF0300"},{"saturation":-100},{"lightness":52},{"gamma":1}]},{"featureType":"water","stylers":[{"hue":"#0078FF"},{"saturation":-13.200000000000003},{"lightness":2.4000000000000057},{"gamma":1}]},{"featureType":"poi","stylers":[{"hue":"#00FF6A"},{"saturation":-1.0989010989011234},{"lightness":11.200000000000017},{"gamma":1}]}]
+
+  $(document).ready(function() {
+  var handler = Gmaps.build('Google');
+  handler.buildMap({ provider: {scrollwheel: false, styles: styles}, internal: { id: 'map' } }, function() {
+  markers = handler.addMarkers(<%= raw @coordinates.to_json %>);
+  handler.bounds.extendWith(markers);
+  handler.fitMapToBounds();
+  if (markers.length == 0) {
+  handler.getMap().setZoom(2);
+} else if (markers.length == 1) {
+handler.getMap().setZoom(14);
+handler.disableScrollWheelZoom();
+
+}
+});
+});
+<% end %>
+<% end %>
+
+
